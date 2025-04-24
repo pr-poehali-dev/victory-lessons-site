@@ -1,45 +1,53 @@
 
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
-import { useState, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Menu } from "lucide-react";
 import Logo from "./Logo";
 import MainNav from "./MainNav";
+import { useMediaQuery } from "@/hooks/use-mobile";
 
-const Header = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [darkMode]);
-  
+export default function Header() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   return (
-    <header className="border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between py-4">
+    <header className="sticky top-0 z-50 w-full border-b bg-white">
+      <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-4">
-          <Logo />
-          <div>
-            <h1 className="text-2xl font-bold text-primary">Уроки Победы</h1>
-            <p className="text-sm text-muted-foreground">Год защитника Отечества</p>
-          </div>
+          <Link to="/" className="flex items-center gap-2">
+            <Logo />
+            <span className="text-xl font-bold">Уроки Победы</span>
+          </Link>
         </div>
-        
-        <div className="flex items-center gap-4">
+
+        {isMobile ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link to="/">Главная</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/dashboard">Личный кабинет</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/students">Учет посещаемости</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
           <MainNav />
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => setDarkMode(!darkMode)}
-          >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          </Button>
-        </div>
+        )}
       </div>
     </header>
   );
-};
-
-export default Header;
+}

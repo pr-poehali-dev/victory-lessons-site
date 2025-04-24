@@ -1,40 +1,38 @@
 
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Shield, Users, Home } from "lucide-react";
 
-const MainNav = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  
+export default function MainNav({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLElement>) {
   return (
-    <nav className="flex gap-1 md:gap-2">
-      <Button 
-        variant={location.pathname === "/" ? "default" : "ghost"} 
-        size="sm"
-        onClick={() => navigate("/")}
+    <nav
+      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+      {...props}
+    >
+      <Link
+        to="/"
+        className="text-sm font-medium transition-colors hover:text-primary"
       >
-        <Home className="mr-2 h-4 w-4" />
         Главная
-      </Button>
-      <Button 
-        variant={location.pathname === "/dashboard" ? "default" : "ghost"} 
-        size="sm"
-        onClick={() => navigate("/dashboard")}
+      </Link>
+      <Link
+        to="/dashboard"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        <Shield className="mr-2 h-4 w-4" />
-        Кабинет куратора
-      </Button>
-      <Button 
-        variant={location.pathname === "/students" ? "default" : "ghost"} 
-        size="sm"
-        onClick={() => navigate("/students")}
+        Личный кабинет
+      </Link>
+      <Link
+        to="/students"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        <Users className="mr-2 h-4 w-4" />
-        Посещаемость
+        Учет посещаемости
+      </Link>
+      <Button variant="default" size="sm">
+        Войти
       </Button>
     </nav>
   );
-};
-
-export default MainNav;
+}
