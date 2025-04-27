@@ -11,12 +11,39 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LogIn, LogOut, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+    
+    if (loggedIn) {
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        const user = JSON.parse(userData);
+        setUserName(user.name);
+      }
+    }
+  }, []);
+  
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUserName(null);
+    navigate("/login");
+  };
+
   return (
     <nav
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
@@ -94,9 +121,42 @@ export default function MainNav({
       >
         Загрузка материалов
       </Link>
-      <Button variant="default" size="sm">
-        Войти
-      </Button>
+      
+      {isLoggedIn ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="flex items-center gap-1">
+              <User className="h-4 w-4 mr-1" />
+              {userName ? userName.split(' ')[0] : 'Профиль'}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link to="/dashboard">Личный кабинет</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/students">Учет посещаемости</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link to="/upload">Загрузка материалов</Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+              <LogOut className="h-4 w-4 mr-2" />
+              Выйти
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button variant="default" size="sm" asChild>
+          <Link to="/login">
+            <LogIn className="h-4 w-4 mr-1" />
+            Войти
+          </Link>
+        </Button>
+      )}
     </nav>
   );
 }

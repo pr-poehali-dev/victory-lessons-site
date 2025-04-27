@@ -19,6 +19,7 @@ import HeroesSvoPage from "./pages/HeroesSvoPage";
 import DirectivesPage from "./pages/DirectivesPage";
 import NaziPlansPage from "./pages/NaziPlansPage";
 import UploadMaterials from "./pages/UploadMaterials";
+import Login from "./pages/Login";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/students" element={<StudentsAttendance />} />
           <Route path="/vov" element={<VovPage />} />
