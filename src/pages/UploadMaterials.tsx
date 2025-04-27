@@ -23,7 +23,7 @@ import {
   FileBox,
   FileImage,
   FileVideo,
-  FilePresentationIcon,
+  FilePresentation,
   FileType
 } from "lucide-react";
 import {
@@ -166,7 +166,7 @@ export default function UploadMaterials() {
         if (fileType.includes('pdf')) {
           return <FileText className="h-5 w-5 text-rose-500" />;
         } else if (fileType.includes('presentation') || fileType.includes('powerpoint')) {
-          return <FilePresentationIcon className="h-5 w-5 text-orange-500" />;
+          return <FilePresentation className="h-5 w-5 text-orange-500" />;
         } else if (fileType.includes('word') || fileType.includes('document')) {
           return <FileType className="h-5 w-5 text-blue-700" />;
         }
